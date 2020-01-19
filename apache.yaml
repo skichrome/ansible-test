@@ -37,6 +37,6 @@
     - name: PHP isn't installed
       debug: msg='PHP not available in this VM'
       when: php_installed|failed
-handlers:
-    -name: restart apache
+  handlers:
+    - name: restart apache
       service: name=httpd state=restarted
