@@ -22,7 +22,7 @@
       copy: src=index.html dest={{ doc_root }}/index.html owner=apache group=apache
       
     - name: Setup Apache host file
-      template: src=vhost_portfolio.tpl dest=/etc/httpd/httpd.conf.d/portfolio.conf
+      template: src=vhost_portfolio.tpl dest=/etc/httpd/conf.d/portfolio.conf
       notify: restart apache
     
     - name: Check if php is installed
