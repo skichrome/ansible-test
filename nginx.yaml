@@ -6,6 +6,7 @@
   # Define variable to be used in tasks
   vars:
     portfolio_root: /var/www/html/portfolio
+    html_root: /var/www/html
     nextcloud_root: /var/www/html/nextcloud
     nextcloud_data_root: /opt/nextcloud-data
 
@@ -73,7 +74,7 @@
     - name: Extract nexcloud archive
       unarchive:
         src: /opt/nextcloud.zip
-        dest: "{{ nextcloud_root }}"
+        dest: "{{ html_root }}"
         remote_src: yes
       when: nexcloudPathStat.stat.islnk is not defined
 
