@@ -45,7 +45,10 @@
       register: nexcloudPathStat
     - debug:
         msg: "Nextcloud path exist"
-      when: nexcloudPathStat.stat.isdir is defined
+      when: nexcloudPathStat.stat.exist
+    - debug:
+        msg: "Nextcloud path doesn't exist"
+      when: nexcloudPathStat.stat.exist == false
 
     - name: Portfolio document root creation
       file: path={{ portfolio_root }} state=directory owner=www-data group=www-data
@@ -55,23 +58,23 @@
 
     - name: Nextcloud document root creation
       file: path={{ nextcloud_root }} state=directory owner=www-data group=www-data
-      when: nexcloudPathStat.stat.isdir is defined
+      when: nexcloudPathStat.stat.exist == false
 
     - name: Nextcloud data root creation
       file: path={{ nextcloud_data_root }} state=directory owner=www-data group=www-data
-      when: nexcloudPathStat.stat.isdir is defined
+      when: nexcloudPathStat.stat.exist == false
 
     - name: Download latest nexcloud archive
       get_url:
         url: https://download.nextcloud.com/server/releases/latest.zip
         dest: /opt/nexcloud.zip
-      when: nexcloudPathStat.stat.isdir is defined
+      when: nexcloudPathStat.stat.exist == false
 
     - name: Extract nexcloud archive
       unarchive:
         src: /opt/nexcloud.zip
         dest: "{{ nextcloud_root }}"
-      when: nexcloudPathStat.stat.isdir is defined
+      when: nexcloudPathStat.stat.exist == false
 
     - name: Setup Nginx host file for Portfolio
       template: src=vhost_portfolio.tpl dest=/etc/nginx/sites-available/portfolio.conf
