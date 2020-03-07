@@ -1,9 +1,4 @@
-<VirtualHost *:80>
-    ServerAdmin webmaster@localhost
-    DocumentRoot {{ doc_root }}
-
-    <Directory {{ doc_root }}>
-        AllowOverride All
-        Require all granted
-    </Directory>
-</VirtualHost>
+server {
+	server_name portfolio.campeoltoni.fr www.portfolio.campeoltoni.fr;
+	root {{ doc_root }};
+}
