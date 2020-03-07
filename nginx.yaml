@@ -45,10 +45,10 @@
       register: nexcloudPathStat
     - debug:
         msg: "Nextcloud path exist"
-      when: nexcloudPathStat.stat.islnk
+      when: nexcloudPathStat.stat.islnk is defined
     - debug:
         msg: "Nextcloud path doesn't exist"
-      when: nexcloudPathStat.stat.islnk == false
+      when: nexcloudPathStat.stat.islnk is not defined
 
     - name: Portfolio document root creation
       file: path={{ portfolio_root }} state=directory owner=www-data group=www-data
@@ -58,17 +58,17 @@
 
     - name: Nextcloud document root creation
       file: path={{ nextcloud_root }} state=directory owner=www-data group=www-data
-      when: nexcloudPathStat.stat.islnk == false
+      when: nexcloudPathStat.stat.islnk is not defined
 
     - name: Nextcloud data root creation
       file: path={{ nextcloud_data_root }} state=directory owner=www-data group=www-data
-      when: nexcloudPathStat.stat.islnk == false
+      when: nexcloudPathStat.stat.islnk is not defined
 
     - name: Download latest nexcloud archive
       get_url:
         url: https://download.nextcloud.com/server/releases/latest.zip
         dest: /opt/nexcloud.zip
-      when: nexcloudPathStat.stat.islnk == false
+      when: nexcloudPathStat.stat.islnk is not defined
 
     - name: Extract nexcloud archive
       unarchive:
