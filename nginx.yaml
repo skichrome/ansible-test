@@ -74,7 +74,7 @@
       unarchive:
         src: /opt/nexcloud.zip
         dest: "{{ nextcloud_root }}"
-      when: nexcloudPathStat.stat.islnk == false
+      when: nexcloudPathStat.stat.islnk is not defined
 
     - name: Setup Nginx host file for Portfolio
       template: src=vhost_portfolio.tpl dest=/etc/nginx/sites-available/portfolio.conf
