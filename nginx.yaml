@@ -20,7 +20,7 @@
   tasks:
     - name: Sytem update
       apt: update_cache=yes autoremove=yes
-      
+
     - name: Nginx install
       apt: name=nginx state=latest
 
@@ -28,59 +28,59 @@
       apt: name=mariadb-server state=latest
 
     - name: PHP Install
-      apt: name:
-           - php
-           - php-common
-           - php-gd
-           - php-json
-           - php-mysql
-           - php-curl
-           - php-mbstring
-           - php-intl
-           - php-imagick
-           - php-xml
-           - php-zip
-           state: latest
+      apt: name
+        - php
+        - php-common
+        - php-gd
+        - php-json
+        - php-mysql
+        - php-curl
+        - php-mbstring
+        - php-intl
+        - php-imagick
+        - php-xml
+        - php-zip
+      state: latest
       
     - name: Portfolio document root creation
       file: path={{ portfolio_root }} state=directory owner=www-data group=www-data
-      
+
     - name: Setup Portfolio HTML file for Portfolio
       copy: src=index.html dest={{ portfolio_root }}/index.html owner=www-data group=www-data
-      
+
     - name: Nextcloud document root creation
       file: path={{ nextcloud_root }} state=directory owner=www-data group=www-data
       when: nexcloudPathStat.stat.isdir is defined
-      
+
     - name: Nextcloud data root creation
       file: path={{ nextcloud_data_root }} state=directory owner=www-data group=www-data
       when: nexcloudPathStat.stat.isdir is defined
 
     - name: Download latest nexcloud archive
       get_url:
-	url: https://download.nextcloud.com/server/releases/latest.zip
-	dest: /opt/nexcloud.zip
+        url: https://download.nextcloud.com/server/releases/latest.zip
+        dest: /opt/nexcloud.zip
       when: nexcloudPathStat.stat.isdir is defined
 
     - name: Extract nexcloud archive
       unarchive:
-	src: /opt/nexcloud.zip
-	dest: "{{ nextcloud_root }}"
+        src: /opt/nexcloud.zip
+        dest: "{{ nextcloud_root }}"
       when: nexcloudPathStat.stat.isdir is defined
-      
+
     - name: Setup Nginx host file for Nextcloud
       template: src=vhost_nexcloud.tpl dest=/etc/nginx/sites-available/nexcloud.conf
       notify: restart nginx
-    
+
     - name: Check if php is installed
       register: php_installed
       command: php -v
       ignore_errors: true
-  
+
     - name: PHP is installed
       debug: var=php_install
       when: php_installed|success
-  
+
     - name: PHP isn't installed
       debug: msg='PHP not available in this VM'
       when: php_installed|failed
