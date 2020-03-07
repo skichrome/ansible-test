@@ -73,9 +73,13 @@
         dest: "{{ nextcloud_root }}"
       when: nexcloudPathStat.stat.isdir is defined
 
+    - name: Setup Nginx host file for Portfolio
+      template: src=vhost_portfolio.tpl dest=/etc/nginx/sites-available/portfolio.conf
+      notify: restart-nginx
+
     - name: Setup Nginx host file for Nextcloud
       template: src=vhost_nexcloud.tpl dest=/etc/nginx/sites-available/nexcloud.conf
-      notify: restart nginx
+      notify: restart-nginx
 
     - name: Check if php is installed
       register: php_installed
@@ -91,5 +95,5 @@
       when: php_installed|failed
 
   handlers:
-    - name: restart Nginx
+    - name: restart-nginx
       service: name=nginx state=restarted
