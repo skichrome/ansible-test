@@ -9,15 +9,15 @@
     nextcloud_root: /var/www/html/nextcloud
     nextcloud_data_root: /opt/nextcloud-data
 
-- stat:
-    path: "{{ nextcloud_root }}"
-  register: nexcloudPathStat
-- debug:
-    msg: "Nextcloud path exist"
-  when: nexcloudPathStat.stat.isdir is defined
-
   # tasks definition section
   tasks:
+    - stat:
+      path: "{{ nextcloud_root }}"
+      register: nexcloudPathStat
+    - debug:
+      msg: "Nextcloud path exist"
+      when: nexcloudPathStat.stat.isdir is defined
+
     - name: Sytem update
       apt: update_cache=yes autoremove=yes
 
@@ -41,7 +41,7 @@
         - php-xml
         - php-zip
       state: latest
-      
+
     - name: Portfolio document root creation
       file: path={{ portfolio_root }} state=directory owner=www-data group=www-data
 
