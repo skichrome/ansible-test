@@ -11,13 +11,6 @@
 
   # tasks definition section
   tasks:
-    - stat:
-      path: "{{ nextcloud_root }}"
-      register: nexcloudPathStat
-    - debug:
-      msg: "Nextcloud path exist"
-      when: nexcloudPathStat.stat.isdir is defined
-
     - name: Sytem update
       apt: update_cache=yes autoremove=yes
 
@@ -41,6 +34,14 @@
         - php-xml
         - php-zip
       state: latest
+
+    - name: Check if nexcloud folder exist and set variable to be used next
+      stat:
+        path: "{{ nextcloud_root }}"
+      register: nexcloudPathStat
+    - debug:
+        msg: "Nextcloud path exist"
+      when: nexcloudPathStat.stat.isdir is defined
 
     - name: Portfolio document root creation
       file: path={{ portfolio_root }} state=directory owner=www-data group=www-data
