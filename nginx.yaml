@@ -67,13 +67,14 @@
     - name: Download latest nexcloud archive
       get_url:
         url: https://download.nextcloud.com/server/releases/latest.zip
-        dest: /opt/nexcloud.zip
+        dest: /opt/nextcloud.zip
       when: nexcloudPathStat.stat.islnk is not defined
 
     - name: Extract nexcloud archive
       unarchive:
-        src: /opt/nexcloud.zip
+        src: /opt/nextcloud.zip
         dest: "{{ nextcloud_root }}"
+        remote_src: yes
       when: nexcloudPathStat.stat.islnk is not defined
 
     - name: Setup Nginx host file for Portfolio
