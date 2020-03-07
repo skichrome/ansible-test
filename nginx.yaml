@@ -37,7 +37,7 @@
           - php-imagick
           - php-xml
           - php-zip
-      state: latest
+        state: latest
 
     - name: Check if nexcloud folder exist and set variable to be used next
       stat:
