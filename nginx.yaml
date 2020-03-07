@@ -1,6 +1,6 @@
 ---
 # Execute on all hosts that are part of main group
-- hosts: main
+- hosts: webservers
   # Root privileges
   become: true
   # Define variable to be used in tasks
