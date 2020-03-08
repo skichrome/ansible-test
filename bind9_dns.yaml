@@ -46,7 +46,7 @@
         notify: restart-bind
 
       - name: Copy bind local ip conf
-        template: src=bind_conf/named.conf.log.tpl dest={{ db_ip_file }}
+        template: src=bind_conf/db.rev.0.7.10.in-addr.arpa.tpl dest={{ db_ip_file }}
         notify: restart-bind
 
   handlers:
