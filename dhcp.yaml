@@ -1,0 +1,38 @@
+---
+- hosts: webservers
+  become: true
+
+  vars:
+      dhcpv4_conf: "/etc/dhcp/dhcpd.conf"
+      dhcpv6_conf: "/etc/dhcp/dhcpd6.conf"
+
+      box_ip_suffix: "1"
+      rasp_ip_suffix: "1"
+      nas_ip_suffix: "24"
+
+      box_ip: "192.168.1.{{ box_ip_suffix }}"
+      rasp_ip: "10.7.22.{{ rasp_ip_suffix }}"
+      nas_ip: "10.7.22.{{ nas_ip_suffix }}"
+
+      box_name: "box"
+      rasp_name: "raspberry"
+      nas_name: "omv"
+      dns_suffix_name: "home"
+
+      subnet: "10.7.22.0"
+      ip_range_low: "10.7.22.50"
+      ip_range_high: "10.7.22.100"
+      subnet: "10.7.22.0"
+      broadcast_addr: "10.7.22.255"
+      ip_netmask: "255.255.255.0"
+
+  tasks:
+      - name: installation de dhcpd
+        apt: name=isc-dhcp-server state=latest
+
+      - name: Copie du fichier de conf IPv4
+        copy: src=dhcp_conf/dhcp.conf.tpl dest={{ dhcpv4_conf }} backup=yes
+
+  handlers:
+      - name: restart-dhcpd
+        service: name=isc-dhcp-server start=restarted
