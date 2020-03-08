@@ -1,3 +1,4 @@
+$TTL    1600
 @ IN SOA {{ rasp_name }}.{{ dns_suffix_name }}. hostmaster.{{ dns_suffix_name }}. (
         0803202001 ; serial
         8H ; refresh

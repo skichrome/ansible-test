@@ -42,11 +42,11 @@
         notify: restart-bind
 
       - name: Copy bind local dns conf
-        template: src=bind_conf/db.home.tpl dest=/etc/bind/{{ db_dns_file }}
+        template: src=bind_conf/db.home.tpl dest={{ db_dns_file }}
         notify: restart-bind
 
       - name: Copy bind local ip conf
-        template: src=bind_conf/named.conf.log.tpl dest=/etc/bind/{{ db_ip_file }}
+        template: src=bind_conf/named.conf.log.tpl dest={{ db_ip_file }}
         notify: restart-bind
 
   handlers:
