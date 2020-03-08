@@ -8,6 +8,7 @@
       dns_reverse_ip: "0.7.10"
       db_dns_file: "/etc/bind/db.{{ dns_suffix_name }}"
       db_ip_file: "/etc/bind/de.rev.{{ dns_reverse_ip }}.in-addr.arpa"
+      bind_logs_dir: "/var/log/named"
 
   tasks:
       - name: Bind DNS server installation
@@ -16,18 +17,21 @@
                 - bind9
                 - bind9utils
 
-      - name: Copy bind files
+      - name: Copy bind options conf
         template: src=bind_conf/named.conf.options.tpl dest=/etc/bind/named.conf.options
         notify: restart-bind
 
-      - name: Copy bind files
+      - name: Copy bind local conf
         template: src=bind_conf/named.conf.local.tpl dest=/etc/bind/named.conf.local
         notify: restart-bind
 
-      - name: Copy bind files
+      - name: Bind logs directory creation
+        file: path={{ bind_logs_dir }} state=directory owner=bind group=root
+
+      - name: Copy bind log conf
         template: src=bind_conf/named.conf.log.tpl dest=/etc/bind/named.conf.log
         notify: restart-bind
 
   handlers:
       - name: restart-bind
-        service: name=bind state=restarted
+        service: name=bind9 state=restarted

@@ -1,18 +1,18 @@
 logging {
         channel update_debug {
-                file "/var/log/update_debug.log" versions 3 size 100k;
+                file "{{ bind_logs_dir }}/update_debug.log" versions 3 size 100k;
                 severity debug;
                 print-severity  yes;
                 print-time      yes;
         };
         channel security_info {
-                file "/var/log/security_info.log" versions 1 size 100k;
+                file "{{ bind_logs_dir }}/security_info.log" versions 1 size 100k;
                 severity info;
                 print-severity  yes;
                 print-time      yes;
         };
         channel bind_log {
-                file "/var/log/bind.log" versions 3 size 1m;
+                file "{{ bind_logs_dir }}/bind.log" versions 3 size 1m;
                 severity info;
                 print-category  yes;
                 print-severity  yes;
