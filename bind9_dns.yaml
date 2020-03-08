@@ -24,6 +24,10 @@
         template: src=bind_conf/named.conf.local.tpl dest=/etc/bind/named.conf.local
         notify: restart-bind
 
+      - name: Copy bind files
+        template: src=bind_conf/named.conf.log.tpl dest=/etc/bind/named.conf.log
+        notify: restart-bind
+
   handlers:
       - name: restart-bind
-      service: name=bind state=restarted
+        service: name=bind state=restarted
