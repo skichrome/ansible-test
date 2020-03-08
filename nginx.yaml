@@ -5,100 +5,139 @@
   become: true
   # Define variable to be used in tasks
   vars:
-    portfolio_root: /var/www/html/portfolio
-    html_root: /var/www/html
-    nextcloud_root: /var/www/html/nextcloud
-    nextcloud_data_root: /opt/nextcloud-data
+      portfolio_root: /var/www/html/portfolio
+      html_root: /var/www/html
+      nextcloud_root: /var/www/html/nextcloud
+      nextcloud_data_root: /opt/nextcloud-data
+      nas_url: "10.7.22.24"
 
   # tasks definition section
   tasks:
-    - name: Sytem update
-      apt: update_cache=yes autoremove=yes
+      - name: Sytem update
+        apt: update_cache=yes autoremove=yes
 
-    - name: Sytem upgrade
-      apt: upgrade=full update_cache=yes autoremove=yes
+      - name: Sytem upgrade
+        apt: upgrade=full update_cache=yes autoremove=yes
 
-    - name: Nginx install
-      apt: name=nginx state=latest
+      - name: Nginx install
+        apt: name=nginx state=latest
 
-    - name: MariaDB Install
-      apt: name=mariadb-server state=latest
+      - name: MariaDB Install
+        apt: name=mariadb-server state=latest
 
-    - name: PHP Install
-      apt:
-        pkg:
-          - php
-          - php-common
-          - php-gd
-          - php-json
-          - php-mysql
-          - php-curl
-          - php-mbstring
-          - php-intl
-          - php-imagick
-          - php-xml
-          - php-zip
-        state: latest
+      - name: PHP Install
+        apt:
+            pkg:
+                - php
+                - php-common
+                - php-gd
+                - php-json
+                - php-mysql
+                - php-curl
+                - php-mbstring
+                - php-intl
+                - php-imagick
+                - php-xml
+                - php-zip
+                - php-fpm
+            state: latest
 
-    - name: Check if nexcloud folder exist and set variable to be used next
-      stat:
-        path: "{{ nextcloud_root }}"
-      register: nexcloudPathStat
-    - debug:
-        msg: "Nextcloud path exist"
+      - name: configure php-fpm
+        lineinfile:
+            name: /etc/php/7.3/fpm/pool./www.conf
+            regexp: '^[www]'
+            line: [www]
+        lineinfile:
+            name: /etc/php/7.3/fpm/pool./www.conf
+            regexp: '^user ='
+            line: user = www-data
+        lineinfile:
+            name: /etc/php/7.3/fpm/pool./www.conf
+            regexp: '^group ='
+            line: group = www-data
+        lineinfile:
+            name: /etc/php/7.3/fpm/pool./www.conf
+            regexp: '^listen ='
+            line: listen = /run/php/php7.3-fpm.sock
+        lineinfile:
+            name: /etc/php/7.3/fpm/pool./www.conf
+            regexp: '^listen.owner ='
+            line: listen.owner = www-data
+        lineinfile:
+            name: /etc/php/7.3/fpm/pool./www.conf
+            regexp: '^listen.group ='
+            line: listen.group = www-data
+
+      - name: Check if nexcloud folder exist and set variable to be used next
+        stat:
+            path: "{{ nextcloud_root }}"
+        register: nexcloudPathStat
+      - debug:
+          msg: "Nextcloud path exist"
       when: nexcloudPathStat.stat.islnk is defined
-    - debug:
-        msg: "Nextcloud path doesn't exist"
-      when: nexcloudPathStat.stat.islnk is not defined
+      - debug:
+          msg: "Nextcloud path doesn't exist"
+        when: nexcloudPathStat.stat.islnk is not defined
 
-    - name: Portfolio document root creation
-      file: path={{ portfolio_root }} state=directory owner=www-data group=www-data
+      - name: Portfolio document root creation
+        file: path={{ portfolio_root }} state=directory owner=www-data group=www-data
 
-    - name: Setup Portfolio HTML file for Portfolio
-      copy: src=index.html dest={{ portfolio_root }}/index.html owner=www-data group=www-data
+      - name: Setup Portfolio HTML file for Portfolio
+        copy: src=index.html dest={{ portfolio_root }}/index.html owner=www-data group=www-data
 
-    - name: Nextcloud document root creation
-      file: path={{ nextcloud_root }} state=directory owner=www-data group=www-data
-      when: nexcloudPathStat.stat.islnk is not defined
+      - name: Nextcloud document root creation
+        file: path={{ nextcloud_root }} state=directory owner=www-data group=www-data
+        when: nexcloudPathStat.stat.islnk is not defined
 
-    - name: Nextcloud data root creation
-      file: path={{ nextcloud_data_root }} state=directory owner=www-data group=www-data
-      when: nexcloudPathStat.stat.islnk is not defined
+      - name: Nextcloud data root creation
+        file: path={{ nextcloud_data_root }} state=directory owner=www-data group=www-data
+        when: nexcloudPathStat.stat.islnk is not defined
 
-    - name: Download latest nexcloud archive
-      get_url:
-        url: https://download.nextcloud.com/server/releases/latest.zip
-        dest: /opt/nextcloud.zip
-      when: nexcloudPathStat.stat.islnk is not defined
+      - name: Download latest nexcloud archive
+        get_url:
+            url: https://download.nextcloud.com/server/releases/latest.zip
+            dest: /opt/nextcloud.zip
+        when: nexcloudPathStat.stat.islnk is not defined
 
-    - name: Extract nexcloud archive
-      unarchive:
-        src: /opt/nextcloud.zip
-        dest: "{{ html_root }}"
-        remote_src: yes
-      when: nexcloudPathStat.stat.islnk is not defined
+      - name: Extract nexcloud archive
+        unarchive:
+            src: /opt/nextcloud.zip
+            dest: "{{ html_root }}"
+            remote_src: yes
+        when: nexcloudPathStat.stat.islnk is not defined
 
-    - name: Setup Nginx host file for Portfolio
-      template: src=vhost_portfolio.tpl dest=/etc/nginx/sites-available/portfolio.conf
-      notify: restart-nginx
+      - name: Setup Nginx host file for Portfolio
+        template: src=virtual_hosts/vhost_portfolio.tpl dest=/etc/nginx/sites-available/portfolio.conf
+        notify: restart-nginx
 
-    - name: Setup Nginx host file for Nextcloud
-      template: src=vhost_nexcloud.tpl dest=/etc/nginx/sites-available/nexcloud.conf
-      notify: restart-nginx
+      - name: Setup Nginx host file for Nextcloud
+        template: src=virtual_hosts/vhost_nexcloud.tpl dest=/etc/nginx/sites-available/nexcloud.conf
+        notify: restart-nginx
 
-    - name: Check if php is installed
-      register: php_installed
-      command: php -v
-      ignore_errors: true
+      - name: Set vhost for jenkins
+        template: src=virtual_hosts/vhost_jenkins.tpl dest=/etc/nginx/sites-available/jenkins.conf
+        notify: restart-nginx
 
-    - name: PHP is installed
-      debug: var=php_install
-      when: php_installed|success
+      - name: Set vhost for jenkins resources
+        template: src=virtual_hosts/vhost_resources_jenkins.tpl dest=/etc/nginx/sites-available/resources-jenkins.conf
+        notify: restart-nginx
 
-    - name: PHP isn't installed
-      debug: msg='PHP not available in this VM'
-      when: php_installed|failed
+      - name: Set vhost for ktor-rem
+          template: src=virtual_hosts/vhost_ktor_rem.tpl dest=/etc/nginx/sites-available/ktor-rem.conf
+          notify: restart-nginx
 
-  handlers:
-    - name: restart-nginx
-      service: name=nginx state=restarted
+      - name: Set vhost for minio
+        template: src=virtual_hosts/vhost_minio.tpl dest=/etc/nginx/sites-available/minio.conf
+        notify: restart-nginx
+
+      - name: Set vhost for nodered
+        template: src=virtual_hosts/vhost_nodered.tpl dest=/etc/nginx/sites-available/nodered.conf
+        notify: restart-nginx
+
+      - name: Set vhost for portainer
+        template: src=virtual_hosts/vhost_portainer.tpl dest=/etc/nginx/sites-available/portainer.conf
+        notify: restart-nginx
+
+ handlers:
+      - name: restart-nginx
+        service: name=nginx state=restarted

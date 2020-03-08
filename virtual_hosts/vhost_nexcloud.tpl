@@ -149,6 +149,3 @@ server {
         access_log off;
     }
 }
-
-
-
