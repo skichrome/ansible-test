@@ -1,0 +1,29 @@
+---
+
+- hosts: webservers
+    become: true
+
+  vars:
+      dns_suffix_name: "home"
+      dns_reverse_ip: "0.7.10"
+      db_dns_file: "/etc/bind/db.{{ dns_suffix_name }}"
+      db_ip_file: "/etc/bind/de.rev.{{ dns_reverse_ip }}.in-addr.arpa"
+
+  tasks:
+      - name: Bind DNS server installation
+        apt:
+            pkg:
+                - bind9
+                - bind9utils
+
+      - name: Copy bind files
+        template: src=bind_conf/name.conf.options.tpl dest=/etc/bind/named.conf.options
+        notify: restart-bind
+
+      - name: Copy bind files
+        template: src=bind_conf/name.conf.local.tpl dest=/etc/bind/named.conf.local
+        notify: restart-bind
+
+handlers:
+    - name: restart-bind
+    service: name=bind state=restarted
