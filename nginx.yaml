@@ -9,6 +9,7 @@
       html_root: /var/www/html
       nextcloud_root: /var/www/html/nextcloud
       nextcloud_data_root: /opt/nextcloud-data
+      php_sock: "/run/php/php7.3-fpm.sock"
       nas_url: "10.7.22.24"
 
   # tasks definition section
@@ -58,7 +59,7 @@
         lineinfile:
             name: /etc/php/7.3/fpm/pool.d/www.conf
             regexp: '^listen ='
-            line: listen = /run/php/php7.3-fpm.sock
+            line: listen = {{ /run/php/php7.3-fpm.sock }}
         lineinfile:
             name: /etc/php/7.3/fpm/pool.d/www.conf
             regexp: '^listen.owner ='
