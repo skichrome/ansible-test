@@ -22,7 +22,6 @@
       subnet: "10.7.22.0"
       ip_range_low: "10.7.22.50"
       ip_range_high: "10.7.22.100"
-      subnet: "10.7.22.0"
       broadcast_addr: "10.7.22.255"
       ip_netmask: "255.255.255.0"
 
@@ -32,6 +31,7 @@
 
       - name: Copie du fichier de conf IPv4
         copy: src=dhcp_conf/dhcp.conf.tpl dest={{ dhcpv4_conf }} backup=yes
+        notify: restart-dhcpd
 
   handlers:
       - name: restart-dhcpd
