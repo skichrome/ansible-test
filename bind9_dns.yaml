@@ -7,7 +7,7 @@
       dns_suffix_name: "home"
       dns_reverse_ip: "0.7.10"
       db_dns_file: "/etc/bind/db.{{ dns_suffix_name }}"
-      db_ip_file: "/etc/bind/de.rev.{{ dns_reverse_ip }}.in-addr.arpa"
+      db_ip_file: "/etc/bind/db.rev.{{ dns_reverse_ip }}.in-addr.arpa"
       bind_logs_dir: "/var/log/named"
       box_ip_suffix: "1"
       rasp_ip_suffix: "1"
