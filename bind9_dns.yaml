@@ -9,6 +9,15 @@
       db_dns_file: "/etc/bind/db.{{ dns_suffix_name }}"
       db_ip_file: "/etc/bind/de.rev.{{ dns_reverse_ip }}.in-addr.arpa"
       bind_logs_dir: "/var/log/named"
+      box_ip_suffix: "1"
+      rasp_ip_suffix: "1"
+      nas_ip_suffix: "24"
+      box_ip: "192.168.1.{{ box_ip_suffix }}"
+      rasp_ip: "10.7.22.{{ rasp_ip_suffix }}"
+      nas_ip: "10.7.22.{{ nas_ip_suffix }}"
+      box_name: "box"
+      rasp_name: "raspberry"
+      nas_name: "omv"
 
   tasks:
       - name: Bind DNS server installation
@@ -30,6 +39,14 @@
 
       - name: Copy bind log conf
         template: src=bind_conf/named.conf.log.tpl dest=/etc/bind/named.conf.log
+        notify: restart-bind
+
+      - name: Copy bind local dns conf
+        template: src=bind_conf/db.home.tpl dest=/etc/bind/{{ db_dns_file }}
+        notify: restart-bind
+
+      - name: Copy bind local ip conf
+        template: src=bind_conf/named.conf.log.tpl dest=/etc/bind/{{ db_ip_file }}
         notify: restart-bind
 
   handlers:
