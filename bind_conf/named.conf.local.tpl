@@ -3,9 +3,11 @@
 // Do any local configuration here
 //
 
+include "/etc/bind/named.conf.log";
+
 // Consider adding the 1918 zones here, if they are not used in your
 // organization
-//include "/etc/bind/zones.rfc1918";
+include "/etc/bind/zones.rfc1918";
 
 zone "{{ dns_suffix_name }}" IN {
         type master;
