@@ -44,27 +44,27 @@
 
       - name: configure php-fpm
         lineinfile:
-            name: /etc/php/7.3/fpm/pool./www.conf
+            name: /etc/php/7.3/fpm/pool.d/www.conf
             regexp: '^[www]'
             line: [www]
         lineinfile:
-            name: /etc/php/7.3/fpm/pool./www.conf
+            name: /etc/php/7.3/fpm/pool.d/www.conf
             regexp: '^user ='
             line: user = www-data
         lineinfile:
-            name: /etc/php/7.3/fpm/pool./www.conf
+            name: /etc/php/7.3/fpm/pool.d/www.conf
             regexp: '^group ='
             line: group = www-data
         lineinfile:
-            name: /etc/php/7.3/fpm/pool./www.conf
+            name: /etc/php/7.3/fpm/pool.d/www.conf
             regexp: '^listen ='
             line: listen = /run/php/php7.3-fpm.sock
         lineinfile:
-            name: /etc/php/7.3/fpm/pool./www.conf
+            name: /etc/php/7.3/fpm/pool.d/www.conf
             regexp: '^listen.owner ='
             line: listen.owner = www-data
         lineinfile:
-            name: /etc/php/7.3/fpm/pool./www.conf
+            name: /etc/php/7.3/fpm/pool.d/www.conf
             regexp: '^listen.group ='
             line: listen.group = www-data
 
