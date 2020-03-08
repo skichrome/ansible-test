@@ -1,5 +1,5 @@
-# Pi-Ansible
+# Pi-ansible
 This is a repository to test ansible software capabilities
 
 ### Server status
-https://jenkins.campeoltoni.fr/buildStatus/icon?job=Pi-Ansible
+[![Build Status](https://jenkins.campeoltoni.fr/buildStatus/icon?job=Pi-Ansible)](https://jenkins.campeoltoni.fr/job/Pi-Ansible/)
