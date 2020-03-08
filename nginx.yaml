@@ -74,7 +74,7 @@
         register: nexcloudPathStat
       - debug:
           msg: "Nextcloud path exist"
-      when: nexcloudPathStat.stat.islnk is defined
+        when: nexcloudPathStat.stat.islnk is defined
       - debug:
           msg: "Nextcloud path doesn't exist"
         when: nexcloudPathStat.stat.islnk is not defined
