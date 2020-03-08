@@ -123,8 +123,8 @@
         notify: restart-nginx
 
       - name: Set vhost for ktor-rem
-          template: src=virtual_hosts/vhost_ktor_rem.tpl dest=/etc/nginx/sites-available/ktor-rem.conf
-          notify: restart-nginx
+        template: src=virtual_hosts/vhost_ktor_rem.tpl dest=/etc/nginx/sites-available/ktor-rem.conf
+        notify: restart-nginx
 
       - name: Set vhost for minio
         template: src=virtual_hosts/vhost_minio.tpl dest=/etc/nginx/sites-available/minio.conf
