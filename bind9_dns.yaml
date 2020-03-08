@@ -1,7 +1,7 @@
 ---
 
 - hosts: webservers
-    become: true
+  become: true
 
   vars:
       dns_suffix_name: "home"
@@ -17,11 +17,11 @@
                 - bind9utils
 
       - name: Copy bind files
-        template: src=bind_conf/name.conf.options.tpl dest=/etc/bind/named.conf.options
+        template: src=bind_conf/named.conf.options.tpl dest=/etc/bind/named.conf.options
         notify: restart-bind
 
       - name: Copy bind files
-        template: src=bind_conf/name.conf.local.tpl dest=/etc/bind/named.conf.local
+        template: src=bind_conf/named.conf.local.tpl dest=/etc/bind/named.conf.local
         notify: restart-bind
 
 handlers:
