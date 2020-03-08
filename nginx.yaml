@@ -138,6 +138,6 @@
         template: src=virtual_hosts/vhost_portainer.tpl dest=/etc/nginx/sites-available/portainer.conf
         notify: restart-nginx
 
- handlers:
+  handlers:
       - name: restart-nginx
         service: name=nginx state=restarted
