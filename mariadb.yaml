@@ -32,7 +32,7 @@
         mysql_user:
             host: "{{ db_host }}"
             name: "{{ db_user }}"
-            password: {{ db_pass }}
+            password: "{{ db_pass }}"
             priv: '{{ database }}.*:ALL'
             update_password: always
             state: present
