@@ -17,12 +17,13 @@
         apt: name=mariadb-server state=latest
 
       - name: Pip Install
-        apt:
-            pkg:
-                - python3-pip
-                - python3.6-dev
-                - libmysqlclient-dev
-            state: latest
+        apt: name=python3-pip state=latest
+
+      - name: Install pip virtualenv
+        pip: name=virtualenv
+
+      - name: Install pip setuptools
+        pip: name=setuptools
 
       - name: Install the Python MySQLB module
         pip: name=MySQL-python
