@@ -23,9 +23,6 @@
       - name: Nginx install
         apt: name=nginx state=latest
 
-      - name: MariaDB Install
-        apt: name=mariadb-server state=latest
-
       - name: PHP Install
         apt:
             pkg:

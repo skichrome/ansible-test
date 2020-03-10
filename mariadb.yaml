@@ -1,0 +1,43 @@
+---
+- hosts: webservers
+  become: true
+
+  vars:
+      database: "nextcloud"
+      db_user: ansible_env.NEXTCLOUD_DB_USER
+      db_pass: ansible_env.NEXTCLOUD_DB_PASS
+      db_host: "localhost"
+
+  tasks:
+      - debug:
+          msg: "Nextcloud user :{{ db_user }}"
+
+      - name: MariaDB Install
+        apt: name=mariadb-server state=latest
+
+      - name: Create nextcloud database
+        mysql_db:
+            name: {{ database }}
+            state: present
+        notify: restart-mariadb
+
+      - name: Remove all anonymous users
+        mysql_user:
+            name: ''
+            host: localhost
+            state: absent
+        notify: restart-mariadb
+
+      - name: Create nextcloud user
+        mysql_user:
+            host: {{ db_host }}
+            name: {{ db_user }}
+            password: {{ db_pass }}
+            priv: '{{ database }}.*:ALL'
+            update_password: always
+            state: present
+        notify: restart-mariadb
+
+  handlers:
+      - name: restart-mariadb
+        service: name=mariadb state=restarted
