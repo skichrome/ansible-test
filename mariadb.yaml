@@ -15,6 +15,12 @@
       - name: MariaDB Install
         apt: name=mariadb-server state=latest
 
+      - name: Pip Install
+        apt: name=python-pip state=latest
+
+      - name: Install the Python MySQLB module
+        pip: name=MySQL-python
+
       - name: Create nextcloud database
         mysql_db:
             name: "{{ database }}"
