@@ -57,7 +57,7 @@
       - name: Create nextcloud database
         mysql_db:
             login_user: 'root'
-            login_password: {{ root_pass }}
+            login_password: "{{ root_pass }}"
             name: "{{ database }}"
             state: present
         notify: restart-mariadb
@@ -66,7 +66,7 @@
         mysql_user:
             name: ''
             login_user: 'root'
-            login_password: {{ root_pass }}
+            login_password: "{{ root_pass }}"
             host: localhost
             state: absent
         notify: restart-mariadb
@@ -74,7 +74,7 @@
       - name: Create nextcloud user
         mysql_user:
             login_user: 'root'
-            login_password: {{ root_pass }}
+            login_password: "{{ root_pass }}"
             host: "{{ db_host }}"
             name: "{{ db_user }}"
             password: "{{ db_pass }}"
