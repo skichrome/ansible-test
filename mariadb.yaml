@@ -4,6 +4,7 @@
 
   vars:
       database: "nextcloud"
+      root_pass: "{{ lookup('env','NEXTCLOUD_DB_PASS_ROOT') }}"
       db_user: "{{ lookup('env','NEXTCLOUD_DB_USER') }}"
       db_pass: "{{ lookup('env','NEXTCLOUD_DB_PASS') }}"
       db_host: "localhost"
@@ -16,10 +17,25 @@
         apt: name=mariadb-server state=latest
 
       - name: Pip Install
-        apt: name=python3-pip state=latest
+        apt:
+            pkg:
+                - python3-pip
+                - python3.6-dev
+                - libmysqlclient-dev
+            state: latest
 
       - name: Install the Python MySQLB module
         pip: name=MySQL-python
+
+      - name: Setup root password
+        mysql_user:
+            name=root
+            host="{{ db_host }}"
+            password="{{ root_pass }}"
+            check_implicit_admin=yes
+            login_user="root"
+            login_password=""
+            state=present
 
       - name: Create nextcloud database
         mysql_db:
