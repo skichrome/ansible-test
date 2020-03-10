@@ -30,7 +30,7 @@
         pip: name=virtualenv
 
       - name: Install the Python MySQLB module
-        pip: name=MySQL-python
+        pip: name=mysqlclient
 
       - name: Setup root password
         mysql_user:
