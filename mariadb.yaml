@@ -4,8 +4,8 @@
 
   vars:
       database: "nextcloud"
-      db_user: ansible_env.NEXTCLOUD_DB_USER
-      db_pass: ansible_env.NEXTCLOUD_DB_PASS
+      db_user: "{{ lookup('env','NEXTCLOUD_DB_USER') }}"
+      db_pass: "{{ lookup('env','NEXTCLOUD_DB_PASS') }}"
       db_host: "localhost"
 
   tasks:
@@ -17,7 +17,7 @@
 
       - name: Create nextcloud database
         mysql_db:
-            name: {{ database }}
+            name: "{{ database }}"
             state: present
         notify: restart-mariadb
 
@@ -30,8 +30,8 @@
 
       - name: Create nextcloud user
         mysql_user:
-            host: {{ db_host }}
-            name: {{ db_user }}
+            host: "{{ db_host }}"
+            name: "{{ db_user }}"
             password: {{ db_pass }}
             priv: '{{ database }}.*:ALL'
             update_password: always
