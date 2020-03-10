@@ -16,17 +16,16 @@
       - name: MariaDB Install
         apt: name=mariadb-server state=latest
 
-      - name: Pip Install
-        apt: name=python3-pip state=latest
-
-      - name: Install pip setuptools
-        apt: name=python3-setuptools state=latest
+      - name: Install pip
+        apt:
+            pkg:
+                - python3
+                - python3-pip
+                - name=python3-setuptools
+            state: latest
 
       - name: Install pip virtualenv
         pip: name=virtualenv
-
-      - name: Install pip setuptools
-        apt: name=python3-setuptools state=latest
 
       - name: Install the Python MySQLB module
         pip: name=MySQL-python
