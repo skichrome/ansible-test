@@ -19,6 +19,9 @@
       - name: Pip Install
         apt: name=python3-pip state=latest
 
+      - name: Install pip setuptools
+        apt: name=python3-setuptools state=latest
+
       - name: Install pip virtualenv
         pip: name=virtualenv
 
