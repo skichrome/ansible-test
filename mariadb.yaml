@@ -33,6 +33,15 @@
       - name: Install the Python MySQLB module
         pip: name=mysqlclient
 
+    # This command will fail when the root password was set previously
+      - name: Check if root password is set
+        shell: >
+            mysqladmin -u root status
+        changed_when: false
+        failed_when: false
+        register: root_pwd_check
+        tags: mariadb
+
       - name: Setup root password
         mysql_user:
             name=root
@@ -42,6 +51,8 @@
             login_user="root"
             login_password=""
             state=present
+        when: root_pwd_check.rc == 0
+        tags: mariadb
 
       - name: Create nextcloud database
         mysql_db:
