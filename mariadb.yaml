@@ -23,7 +23,7 @@
         pip: name=virtualenv
 
       - name: Install pip setuptools
-        pip: name=setuptools
+        apt: name=python3-setuptools state=latest
 
       - name: Install the Python MySQLB module
         pip: name=MySQL-python
