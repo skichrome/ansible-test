@@ -23,6 +23,13 @@
       - name: Nginx install
         apt: name=nginx state=latest
 
+      - name: Certbot install
+        apt:
+            pkg:
+                - certbot
+                - python-certbot-nginx
+            state: latest
+
       - name: PHP Install
         apt:
             pkg:
