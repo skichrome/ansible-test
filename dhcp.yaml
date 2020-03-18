@@ -30,7 +30,7 @@
         apt: name=isc-dhcp-server state=latest
 
       - name: Copie du fichier de conf IPv4
-        copy: src=dhcp_conf/dhcp.conf.tpl dest={{ dhcpv4_conf }} backup=yes
+        template: src=dhcp_conf/dhcp.conf.tpl dest={{ dhcpv4_conf }}
         notify: restart-dhcpd
 
   handlers:

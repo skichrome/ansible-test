@@ -11,11 +11,11 @@ authoritative;
 log-facility local7;
 
 #LAN
-subnet {{ subnet }} netmask {{ netmask }} {
+subnet {{ subnet }} netmask {{ ip_netmask }} {
     authoritative;
     range {{ ip_range_low }} {{ ip_range_high }};
     option routers {{ rasp_ip }};
     option domain-name-servers {{ rasp_ip }}, 84.200.69.80, 84.200.70.40, 208.67.222.222, 208.67.220.220;
-    option broadcast-address 10.7.22.255;
-    option domain-name "raspberry.home";
+    option broadcast-address {{ broadcast_addr }};
+    option domain-name "{{ rasp_name }}.{{ dns_suffix_name }};
 }

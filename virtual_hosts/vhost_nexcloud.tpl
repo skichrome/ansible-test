@@ -77,7 +77,7 @@ server {
     gzip_comp_level 4;
     gzip_min_length 256;
     gzip_proxied expired no-cache no-store private no_last_modified no_etag auth;
-    gzip_types application/atom+xml application/javascript application/json application/ld$
+    gzip_types application/atom+xml application/javascript application/json application/ld+json application/manifest+json application/rss+xml application/vnd.geo+json application/vnd.ms-fontobject application/x-font-ttf application/x-web-app-manifest+json application/xhtml+xml application/xml font/opentype image/bmp image/svg+xml image/x-icon text/cache-manifest text/css text/plain text/vcard text/vnd.rim.location.xloc text/vtt text/x-component text/x-cross-domain-policy;
 
     # Uncomment if your server is build with the ngx_pagespeed module
     # This module is currently not supported.
@@ -94,7 +94,7 @@ server {
         deny all;
     }
 
-    location ~ ^\/(?:index|remote|public|cron|core\/ajax\/update|status|ocs\/v[12]|updater$
+    location ~ ^\/(?:index|remote|public|cron|core\/ajax\/update|status|ocs\/v[12]|updater\/.+|oc[ms]-provider\/.+)\.php(?:$|\/) {
         fastcgi_split_path_info ^(.+?\.php)(\/.*|)$;
         set $path_info $fastcgi_path_info;
         try_files $fastcgi_script_name =404;
@@ -125,7 +125,7 @@ server {
         # have those duplicated to the ones above)
         # Before enabling Strict-Transport-Security headers please read into
         # this topic first.
-        #add_header Strict-Transport-Security "max-age=15768000; includeSubDomains; preloa$
+        #add_header Strict-Transport-Security "max-age=15768000; includeSubDomains; preload;";
         #
         # WARNING: Only add the preload option once you read about
         # the consequences in https://hstspreload.org/. This option
