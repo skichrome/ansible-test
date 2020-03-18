@@ -28,10 +28,5 @@ server {
 
     server_name jenkins.campeoltoni.fr www.jenkins.campeoltoni.fr;
 
-    location / {
-        include proxy_params;
-        proxy_pass http://jenkins;
-    }
-
     return 404; # managed by Certbot
 }
