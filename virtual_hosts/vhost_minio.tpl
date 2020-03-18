@@ -19,14 +19,14 @@ server {
 }
 
 server {
-    if ($host = jenkins.campeoltoni.fr) {
+    if ($host = minio.campeoltoni.fr) {
         return 301 https://$host$request_uri;
     } # managed by Certbot
 
     listen 80;
     listen [::]:80;
 
-    server_name jenkins.campeoltoni.fr www.jenkins.campeoltoni.fr;
+    server_name minio.campeoltoni.fr www.minio.campeoltoni.fr;
 
     return 404; # managed by Certbot
 }
